@@ -1,0 +1,58 @@
+#!/usr/bin/python3
+
+import sys
+import time
+
+def factorize(num):
+    '''
+    This function takes a positive integer as input and attempts to find its factors.
+    
+    Args:
+        num (int): The input integer to be factorized.
+        
+    Returns:
+        tuple or None: 
+            - If the number is not a prime, it returns a tuple of two factors (a, b) such that num = a * b.
+            - If the number is prime, it returns None, indicating that no factors were found.
+    '''
+    for i in range(2, int(num ** 0.5) + 1):
+        if num % i == 0:
+            return (i, num // i)
+    return None
+
+if __name__ == "__main__":
+    '''
+    This section of the code is executed when the script is run as the main program.
+    It reads an input file containing natural numbers, factors each number, and prints the factorization if found.
+    A time limit of 5 seconds is set for the entire process.
+    '''
+
+    # Check if the correct number of command-line arguments is provided.
+    if len(sys.argv) != 2:
+        print("Usage: factors <file>")
+        exit()
+
+    input_file = sys.argv[1]
+
+    try:
+        # Read the lines from the input file.
+        with open(input_file, 'r') as f:
+            lines = f.readlines()
+    except FileNotFoundError:
+        print("File not found")
+        exit()
+
+    start_time = time.time()
+
+    # Loop over each line in the input file, factorize the numbers, and print the factorization if non-prime.
+    for line in lines:
+        num = int(line.strip())
+        factors = factorize(num)
+        
+        if factors:
+            print(f"{num} = {factors[0]} * {factors[1]}")
+
+        # Check if the elapsed time exceeds 5 seconds and exit if so.
+        if time.time() - start_time > 5:
+            print("Time limit exceeded")
+            exit()
